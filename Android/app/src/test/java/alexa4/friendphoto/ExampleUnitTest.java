@@ -1,4 +1,4 @@
-package alexA4.friendPhoto;
+package alexa4.friendphoto;
 
 import org.junit.Test;
 
