@@ -1,5 +1,7 @@
 package alexa4.friendphoto.controllers;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,6 +15,7 @@ import alexa4.friendphoto.models.Friend;
  * Controller that contains list of friends and can restore it from json string
  */
 public class FriendsController {
+    private static final String TAG = "FriendsController";
     public final ArrayList<Friend> mFriends = new ArrayList<>();
 
 
@@ -22,6 +25,7 @@ public class FriendsController {
      * @param jsonString input string with friends
      */
     public void setFriends(String jsonString) {
+        Log.d(TAG, jsonString);
         mFriends.clear();
         try {
             JSONObject json = new JSONObject(jsonString).getJSONObject("response");

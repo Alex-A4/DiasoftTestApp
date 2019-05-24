@@ -1,5 +1,7 @@
 package alexa4.friendphoto.controllers;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -12,6 +14,7 @@ import alexa4.friendphoto.models.Photo;
  * Controller that contains list of photos of one friend
  */
 public class PhotosController {
+    private static final String TAG = "PhotosController";
     public final ArrayList<Photo> mPhotos = new ArrayList<>();
     // Owner id needs to check is photos already downloaded
     private int mOwnerId;
@@ -22,6 +25,7 @@ public class PhotosController {
      * @param jsonString json string from response
      */
     public void setPhotos(String jsonString) {
+        Log.d(TAG, jsonString);
         mPhotos.clear();
 
         // TODO: make list auto-complemented while scrolling
