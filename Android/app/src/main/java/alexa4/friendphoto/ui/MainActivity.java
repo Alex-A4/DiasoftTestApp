@@ -1,37 +1,67 @@
 package alexa4.friendphoto.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 
-import android.net.Uri;
+import android.content.Context;
 import android.os.Bundle;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+import android.util.Log;
+import android.widget.Toast;
 
 import alexa4.friendphoto.R;
-import alexa4.friendphoto.repositories.AuthCallback;
 import alexa4.friendphoto.repositories.DataRepository;
 
 
-public class MainActivity extends AppCompatActivity implements ActivityCallback{
-    private WebView mWebView;
+public class MainActivity extends AppCompatActivity implements ActivityCallback, RepositoryProvider {
+    private static final String TAG = "MainActivity";
     private DataRepository mRepository;
+    private AuthFragment mAuthFragment;
+    private FriendsFragment mFriendsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mRepository = new DataRepository(MainActivity.this);
+        mAuthFragment = new AuthFragment();
+        mFriendsFragment = new FriendsFragment();
 
-        mWebView = findViewById(R.id.webView);
-        mWebView.setWebViewClient(new MyWebViewClient(mRepository));
+        checkAuthenticationAndInitializeUI();
     }
 
-    // Load page to webView, if user not authenticated
-    void loadAuthPage() {
-        // Scope = 65538. Friends + offline
-        mWebView.loadUrl("https://oauth.vk.com/authorize?client_id=6994466&" +
-                "display=page&scope=65538&response_type=token&v=5.95");
+    /**
+     * Check is user already authenticated and then set up starting screen
+     */
+    private void checkAuthenticationAndInitializeUI() {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        // If user authenticated, open friends page else load webView
+        if (mRepository.checkAuthentication(getPreferences(Context.MODE_PRIVATE))) {
+            transaction.replace(R.id.fragment_root, mFriendsFragment)
+                    .commit();
+        } else {
+            transaction.replace(R.id.fragment_root, mAuthFragment)
+                    .commit();
+        }
+    }
+
+    /**
+     * Callback from repository that sign is user authenticated
+     * If true, then show friends page else show toast
+     *
+     * @param isAuth
+     */
+    @Override
+    public void authenticateUser(boolean isAuth) {
+        if (!isAuth) {
+            Log.d(TAG, "User is not authenticated");
+            Toast.makeText(this, "Unable to load page, try later",
+                    Toast.LENGTH_SHORT).show();
+        } else {
+            Log.d(TAG, "User is authenticated");
+            FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+            trans.replace(R.id.fragment_root, mFriendsFragment)
+                    .commit();
+        }
     }
 
     @Override
@@ -40,66 +70,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCallback{
         super.onDestroy();
     }
 
+    // Provide repository for fragments
     @Override
-    public void userAuthenticated(boolean isAuth) {
-        if (!isAuth)
-            loadAuthPage();
-        else {
-            //TODO: hide webView
-            mRepository.downloadFriends();
-        }
-    }
-
-    @Override
-    public void friendsDownloaded(boolean isDownloaded) {
-        //TODO: show friends page
-
-    }
-
-    @Override
-    public void photosDownloaded(boolean isDownloaded) {
-        //TODO: show photos page
-    }
-}
-
-/**
- * Own implementation of client to handle input requests
- */
-class MyWebViewClient extends WebViewClient {
-    private AuthCallback mCallback;
-
-    public MyWebViewClient(AuthCallback callback) {
-        mCallback = callback;
-    }
-
-    @Override
-    public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-        System.out.println("request.getUrl().toString() = " + request.getUrl().toString());
-        view.loadUrl(request.getUrl().toString());
-
-        System.out.println("HOST: "+request.getUrl().getHost()+request.getUrl().getPath());
-        // If there is result of authentication, then send it callback
-        if ((request.getUrl().getHost()+request.getUrl().getPath()).equals("oauth.vk.com/blank.html")) {
-            mCallback.sendUserAuthFragment(request.getUrl().getFragment());
-        }
-
-        return true;
-    }
-
-    // For old devices
-    @Override
-    public boolean shouldOverrideUrlLoading(WebView view, String url) {
-        Uri request = Uri.parse(url);
-
-        System.out.println("request.getUrl().toString() = " + request.toString());
-        view.loadUrl(request.toString());
-
-        System.out.println("HOST: "+request.getHost()+request.getPath());
-        // If there is result of authentication, then send it callback
-        if ((request.getHost()+request.getPath()).equals("oauth.vk.com/blank.html")) {
-            mCallback.sendUserAuthFragment(request.getFragment());
-        }
-
-        return true;
+    public DataRepository getRepository() {
+        return mRepository;
     }
 }
