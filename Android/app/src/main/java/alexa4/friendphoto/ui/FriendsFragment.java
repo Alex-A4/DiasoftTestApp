@@ -107,7 +107,7 @@ public class FriendsFragment extends Fragment {
             holder.mInitials.getRootView()
                     .setOnClickListener(v -> {
                         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                        transaction.add(R.id.fragment_root,
+                        transaction.replace(R.id.fragment_root,
                                 new PhotosFragment(mFriends.get(position).mId));
                         transaction.addToBackStack(null);
                         transaction.commit();
