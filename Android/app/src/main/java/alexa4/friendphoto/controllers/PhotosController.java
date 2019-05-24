@@ -17,7 +17,7 @@ public class PhotosController {
     private static final String TAG = "PhotosController";
     public final ArrayList<Photo> mPhotos = new ArrayList<>();
     // Owner id needs to check is photos already downloaded
-    private int mOwnerId;
+    private int mOwnerId = 0;
 
     /**
      * Set up photos list from input json string
@@ -28,12 +28,10 @@ public class PhotosController {
         Log.d(TAG, jsonString);
         mPhotos.clear();
 
-        // TODO: make list auto-complemented while scrolling
         try {
             JSONObject json = new JSONObject(jsonString).getJSONObject("response");
-            int count = json.getInt("count");
             JSONArray array = json.getJSONArray("items");
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < array.length(); i++)
                 mPhotos.add(new Photo(array.getJSONObject(i)));
 
         } catch (JSONException e) {
