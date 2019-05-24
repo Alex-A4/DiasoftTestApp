@@ -91,14 +91,6 @@ public class FriendsFragment extends Fragment {
             View view = LayoutInflater.from(getContext())
                     .inflate(R.layout.friends_item, parent, false);
 
-            // Set up listener to show photos fragment
-            view.setOnClickListener(v -> {
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.add(R.id.fragment_root, new PhotosFragment());
-                transaction.addToBackStack(null);
-                transaction.commit();
-            });
-
             return new FriendsViewHolder(view);
         }
 
@@ -110,6 +102,16 @@ public class FriendsFragment extends Fragment {
                     .into(holder.mImage);
             holder.mInitials.setText(friend.mName + " " + friend.mLastName);
             holder.mStatus.setText(friend.mStatus);
+
+            // Set up listener to show photos fragment
+            holder.mInitials.getRootView()
+                    .setOnClickListener(v -> {
+                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                        transaction.add(R.id.fragment_root,
+                                new PhotosFragment(mFriends.get(position).mId));
+                        transaction.addToBackStack(null);
+                        transaction.commit();
+                    });
         }
 
         @Override
