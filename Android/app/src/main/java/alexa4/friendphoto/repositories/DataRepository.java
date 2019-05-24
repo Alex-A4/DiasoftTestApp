@@ -58,8 +58,8 @@ public class DataRepository implements AuthCallback {
                     mPhotos.setOwnerId(friendId);
                     mPhotos.setPhotos(response.body().string());
                 }
-                emitter.onNext(mPhotos.mPhotos);
             }
+            emitter.onNext(mPhotos.mPhotos);
             emitter.onComplete();
         })
                 .subscribeOn(Schedulers.io())
