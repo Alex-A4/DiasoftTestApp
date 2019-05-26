@@ -13,7 +13,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -125,12 +124,10 @@ public class PhotosFragment extends Fragment {
             Photo photo = mPhotos.get(position);
 
             // Set up listener to observe photo in full screen
-            holder.mImage.setOnClickListener(v -> {
-//                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-//                transaction.add(R.id.fragment_root, new PhotosFragment());
-//                transaction.addToBackStack(null);
-//                transaction.commit();
-            });
+            holder.mImage.setOnClickListener(v ->
+                    startActivity(FullPhotoActivity.getInstance(getActivity(),
+                            photo.mText, photo.mBigSize))
+            );
             holder.mText.setText(photo.mText);
             Picasso.get()
                     .load(photo.mSmallSize)
