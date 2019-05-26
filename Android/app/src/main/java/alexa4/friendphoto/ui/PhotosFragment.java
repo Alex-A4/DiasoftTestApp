@@ -67,10 +67,10 @@ public class PhotosFragment extends Fragment {
     }
 
     private void showError(Throwable e) {
-        Log.e(TAG, e.getStackTrace().toString());
+        Log.d(TAG, "Unable to load photos");
 
         Toast.makeText(getContext(),
-                "Unable to load photos", Toast.LENGTH_SHORT).show();
+                "Unable to load photos, check connectivity", Toast.LENGTH_SHORT).show();
         getFragmentManager().popBackStack();
     }
 
