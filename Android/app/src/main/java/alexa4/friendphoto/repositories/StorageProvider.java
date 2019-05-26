@@ -15,24 +15,10 @@ public class StorageProvider {
     private static final String TAG = "StorageProvider";
 
     /**
-     * Check is provider initialized
-     */
-//    public boolean isInitialized() {
-//        return mPreferences != null;
-//    }
-
-    /**
      * Initialize provider by preferences instance
      */
     public void initialize(SharedPreferences prefs) {
         mPreferences = prefs;
-    }
-
-    /**
-     * Save string with parameters to SharedPreferences
-     */
-    public void saveString(String name, String data) {
-        mPreferences.edit().putString(name, data).apply();
     }
 
     /**
