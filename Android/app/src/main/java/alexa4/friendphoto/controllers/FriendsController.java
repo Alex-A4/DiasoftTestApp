@@ -20,6 +20,13 @@ public class FriendsController {
 
 
     /**
+     * Check is friends already downloaded
+     */
+    public boolean isLoaded() {
+        return mFriends.size() != 0;
+    }
+
+    /**
      * Set up friends list from input json string
      *
      * @param jsonString input string with friends

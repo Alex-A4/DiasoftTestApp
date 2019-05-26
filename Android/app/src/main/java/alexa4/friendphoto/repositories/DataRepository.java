@@ -72,13 +72,15 @@ public class DataRepository implements AuthCallback {
      */
     public Observable<ArrayList<Friend>> downloadFriends() {
         return Observable.<ArrayList<Friend>>create(emitter -> {
-            Request request = new Request.Builder()
-                    .url("https://api.vk.com/method/friends.get?fields=photo_100, status&v=5.95&access_token="
-                            + mUser.mToken)
-                    .build();
-            try (Response response = client.newCall(request).execute()) {
-                if (response.isSuccessful())
-                    mFriends.setFriends(response.body().string());
+            if (!mFriends.isLoaded()) {
+                Request request = new Request.Builder()
+                        .url("https://api.vk.com/method/friends.get?fields=photo_100, status&v=5.95&access_token="
+                                + mUser.mToken)
+                        .build();
+                try (Response response = client.newCall(request).execute()) {
+                    if (response.isSuccessful())
+                        mFriends.setFriends(response.body().string());
+                }
             }
             emitter.onNext(mFriends.mFriends);
             emitter.onComplete();
