@@ -1,10 +1,11 @@
 package alexa4.friendphoto.repositories;
 
-import android.content.SharedPreferences;
+import android.content.Context;
 import android.util.Log;
 
 import java.util.ArrayList;
 
+import alexa4.friendphoto.controllers.DbController;
 import alexa4.friendphoto.controllers.FriendsController;
 import alexa4.friendphoto.controllers.PhotosController;
 import alexa4.friendphoto.models.Friend;
@@ -32,6 +33,7 @@ public class DataRepository implements AuthCallback {
     private final PhotosController mPhotos = new PhotosController();
     private User mUser;
 
+    private DbController mDbController;
     private StorageProvider mStorage = new StorageProvider();
 
     // The link to UI
@@ -39,6 +41,9 @@ public class DataRepository implements AuthCallback {
 
     public DataRepository(ActivityCallback UI) {
         mUI = UI;
+        mDbController = new DbController(mUI.getContext());
+        mStorage.initialize(mUI.getContext()
+                .getSharedPreferences("DataRepository", Context.MODE_PRIVATE));
     }
 
     /**
@@ -72,15 +77,24 @@ public class DataRepository implements AuthCallback {
      */
     public Observable<ArrayList<Friend>> downloadFriends() {
         return Observable.<ArrayList<Friend>>create(emitter -> {
+            // Read from DB if there is first launch
+            if (!mFriends.isLoaded())
+                mFriends.setFromDb(mDbController.readFriends());
+
+            // Download from network if there is no data after DB reading
             if (!mFriends.isLoaded()) {
+
                 Request request = new Request.Builder()
                         .url("https://api.vk.com/method/friends.get?fields=photo_100, status&v=5.95&access_token="
                                 + mUser.mToken)
                         .build();
                 try (Response response = client.newCall(request).execute()) {
-                    if (response.isSuccessful())
+                    if (response.isSuccessful()) {
                         mFriends.setFriends(response.body().string());
+                        mDbController.saveFriends(mFriends.mFriends);
+                    }
                 }
+
             }
             emitter.onNext(mFriends.mFriends);
             emitter.onComplete();
@@ -128,12 +142,9 @@ public class DataRepository implements AuthCallback {
      * Check is user authenticated and get its info if true
      * This method must be called before any transactions
      *
-     * @param preferences link to preferences
      * @return is user authenticated
      */
-    public boolean checkAuthentication(SharedPreferences preferences) {
-        mStorage.initialize(preferences);
-
+    public boolean checkAuthentication() {
         if (mStorage.isUserAuthenticated()) {
             try {
                 mUser = mStorage.getUserData();
