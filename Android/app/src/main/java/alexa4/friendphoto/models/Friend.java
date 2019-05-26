@@ -14,6 +14,19 @@ public class Friend {
     public final String mPhotoUrl; // url of profile photo
     public final String mStatus;
 
+    /**
+     * Default constructor.
+     * Uses to restore from DB
+     */
+    public Friend(int id, String name, String lastName,
+                  String photoUrl, String status) {
+        mId = id;
+        mName = name;
+        mLastName = lastName;
+        mPhotoUrl = photoUrl;
+        mStatus = status;
+    }
+
     // Constructor to restore data from JSON
     public Friend(JSONObject json) throws JSONException {
         mId = json.getInt("id");
