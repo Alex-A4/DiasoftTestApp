@@ -19,8 +19,8 @@ public class Photo {
         mText = json.getString("text");
 
         JSONArray array = json.getJSONArray("sizes");
-        mBigSize = array.getJSONObject(4).getString("url");
-        mSmallSize = array.getJSONObject(0).getString("url");
+        mBigSize = array.getJSONObject(array.length() - 1).getString("url");
+        mSmallSize = array.getJSONObject((array.length() - 1) / 2).getString("url");
 
     }
 }
