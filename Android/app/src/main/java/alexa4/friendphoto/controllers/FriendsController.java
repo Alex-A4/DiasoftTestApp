@@ -47,6 +47,13 @@ public class FriendsController {
         }
     }
 
+    /**
+     * Set up friends list from DB
+     */
+    public void setFromDb(ArrayList<Friend> friends) {
+        mFriends.addAll(friends);
+    }
+
     public void dispose() {
         mFriends.clear();
     }
