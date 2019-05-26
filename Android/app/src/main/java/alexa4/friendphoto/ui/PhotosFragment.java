@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -71,9 +72,6 @@ public class PhotosFragment extends Fragment {
 
         Toast.makeText(getContext(),
                 "Unable to load photos", Toast.LENGTH_SHORT).show();
-//        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-//        transaction.remove(PhotosFragment.this);
-//        transaction.commit();
         getFragmentManager().popBackStack();
     }
 
@@ -90,6 +88,7 @@ public class PhotosFragment extends Fragment {
 
         public class PhotosViewHolder extends RecyclerView.ViewHolder {
             public ImageView mImage;
+            public TextView mText;
 
             public PhotosViewHolder(@NonNull View view) {
                 super(view);
@@ -97,6 +96,8 @@ public class PhotosFragment extends Fragment {
                 mImage.requestLayout();
                 mImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 mImage.getLayoutParams().width = mWidth / 2;
+
+                mText = view.findViewById(R.id.photo_text);
             }
         }
 
@@ -130,7 +131,7 @@ public class PhotosFragment extends Fragment {
 //                transaction.addToBackStack(null);
 //                transaction.commit();
             });
-
+            holder.mText.setText(photo.mText);
             Picasso.get()
                     .load(photo.mSmallSize)
                     .into(holder.mImage);
