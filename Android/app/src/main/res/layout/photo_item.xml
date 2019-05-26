@@ -18,6 +18,8 @@
         app:layout_constraintRight_toRightOf="@id/photo_item"
         app:layout_constraintBottom_toBottomOf="@id/photo_item"
         android:maxLines="2"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
         android:layout_width="0dp"
         android:layout_height="wrap_content" />
 
