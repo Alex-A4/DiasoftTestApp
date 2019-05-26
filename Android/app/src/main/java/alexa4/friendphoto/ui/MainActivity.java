@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCallback,
     private void checkAuthenticationAndInitializeUI() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         // If user authenticated, open friends page else load webView
-        if (mRepository.checkAuthentication(getPreferences(Context.MODE_PRIVATE))) {
+        if (mRepository.checkAuthentication()) {
             transaction.replace(R.id.fragment_root, mFriendsFragment)
                     .commit();
             setTitle("Friends");
@@ -65,6 +65,11 @@ public class MainActivity extends AppCompatActivity implements ActivityCallback,
                     .commit();
             setTitle("Friends");
         }
+    }
+
+    @Override
+    public Context getContext() {
+        return this;
     }
 
     @Override
