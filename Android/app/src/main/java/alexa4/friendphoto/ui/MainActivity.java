@@ -38,9 +38,11 @@ public class MainActivity extends AppCompatActivity implements ActivityCallback,
         if (mRepository.checkAuthentication(getPreferences(Context.MODE_PRIVATE))) {
             transaction.replace(R.id.fragment_root, mFriendsFragment)
                     .commit();
+            setTitle("Friends");
         } else {
             transaction.replace(R.id.fragment_root, mAuthFragment)
                     .commit();
+            setTitle("Authentication");
         }
     }
 
@@ -61,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCallback,
             FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
             trans.replace(R.id.fragment_root, mFriendsFragment)
                     .commit();
+            setTitle("Friends");
         }
     }
 
