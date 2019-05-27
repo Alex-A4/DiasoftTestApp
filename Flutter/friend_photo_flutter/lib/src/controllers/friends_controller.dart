@@ -12,10 +12,11 @@ class FriendsController {
 
   /// Set up friends list from input [jsonString]
   void setFriends(String jsonString) {
+    print(jsonString);
     friends.clear();
 
     try {
-      Map<String, dynamic> json = _codec.decode(jsonString);
+      Map<String, dynamic> json = _codec.decode(jsonString)['response'];
       List list = json['items'];
       list.forEach((friend) => friends.add(new Friend.fromJson(friend)));
     } catch (e) {

@@ -11,6 +11,7 @@ class PhotosController {
 
   /// Set up photos list from input [jsonString]
   void setPhotos(String jsonString) {
+    print(jsonString);
     photos.clear();
     try {
       Map<String, dynamic> json = _codec.decode(jsonString)['response'];
