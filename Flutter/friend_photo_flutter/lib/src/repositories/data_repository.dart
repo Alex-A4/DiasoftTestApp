@@ -1,7 +1,10 @@
 import 'package:friend_photo_flutter/src/controllers/friends_controller.dart';
 import 'package:friend_photo_flutter/src/controllers/photos_controller.dart';
+import 'package:friend_photo_flutter/src/models/friend.dart';
+import 'package:friend_photo_flutter/src/models/photo.dart';
 import 'package:friend_photo_flutter/src/models/user.dart';
 import 'package:friend_photo_flutter/src/repositories/storage_repo.dart';
+import 'package:http/http.dart' as http;
 
 /// Repository that provide full data about friends, photos and user
 class DataRepository {
@@ -20,6 +23,41 @@ class DataRepository {
       return true;
     }
     return false;
+  }
+
+  /// Get list of friends
+  /// If they were in DB then return momentally
+  /// else download them through API
+  Future<List<Friend>> getFriendsList() async {
+    if (_friends.friends.length != 0) return _friends.friends;
+
+    var response =
+        await http.get('https://api.vk.com/method/friends.get?fields=photo_100,'
+            'status&v=5.95&access_token=${_user.accessToken}');
+    if (response.statusCode == 200) {
+      _friends.setFriends(response.body);
+      //TODO: add saving friends to DB
+      return _friends.friends;
+    } else
+      throw Exception();
+  }
+
+  /// Get list of photos by specified [friendId]
+  /// If that photos alredy downloaded, then return them
+  Future<List<Photo>> getPhotosList(int friendId) async {
+    if (_photos.isIdential(friendId)) return _photos.photos;
+
+    var response =
+        await http.get('https://api.vk.com/method/photos.get?owner_id='
+            '$friendId&album_id=wall&v=5.95&access_token=${_user.accessToken}');
+
+    // If everything is OK, then return new list
+    if (response.statusCode == 200) {
+      _photos.ownerId = friendId;
+      _photos.setPhotos(response.body);
+      return _photos.photos;
+    } else
+      throw Exception();
   }
 
   /// Authenticate user from input [url]
