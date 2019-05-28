@@ -1,3 +1,4 @@
+import 'package:friend_photo_flutter/src/controllers/db_controller.dart';
 import 'package:friend_photo_flutter/src/controllers/friends_controller.dart';
 import 'package:friend_photo_flutter/src/controllers/photos_controller.dart';
 import 'package:friend_photo_flutter/src/models/friend.dart';
@@ -11,6 +12,7 @@ class DataRepository {
   final FriendsController _friends = FriendsController();
   final PhotosController _photos = PhotosController();
   final StorageRepository _storage = StorageRepository();
+  final DbController _db = DbController();
   User _user;
 
   /// Check is user authenticated
@@ -19,7 +21,10 @@ class DataRepository {
     if (await _storage.isUserAuthenticated()) {
       _user = await _storage.getUserData();
 
-      // TODO: add reading friends from DB
+      // Read friends list
+      var list = await _db.getFriendsList();
+      _friends.setFromDb(list);
+
       return true;
     }
     return false;
@@ -36,7 +41,10 @@ class DataRepository {
             'status&v=5.95&access_token=${_user.accessToken}');
     if (response.statusCode == 200) {
       _friends.setFriends(response.body);
-      //TODO: add saving friends to DB
+
+      // Save friends to DB
+      await _db.setFriendsList(_friends.friends);
+
       return _friends.friends;
     } else
       throw Exception();
