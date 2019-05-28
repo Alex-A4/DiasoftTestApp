@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:friend_photo_flutter/src/repositories/data_repository.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -33,6 +35,8 @@ class Bloc {
     /// If data had been initialized then send state that user
     /// authenticated else not
     if (event is EventLaunch) {
+      /// Delay process of work
+      await Future.delayed(Duration(seconds: 2));
       if (await repository.checkAuthentication())
         yield StateAuthenticated();
       else
