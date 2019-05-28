@@ -7,6 +7,7 @@ import 'ui/main_screen.dart';
 /// Widget that initialize provider and starting screen
 class App extends StatelessWidget {
   final Bloc bloc = Bloc();
+
   @override
   Widget build(BuildContext context) {
     return Provider(
@@ -22,5 +23,5 @@ class App extends StatelessWidget {
 /// Default theme of app
 final theme = ThemeData(
   primaryColor: Color(0xFFB0283C),
-  accentColor: Color(0xFFe75c66),
+  accentColor: Color(0xFF80A000),
 );
