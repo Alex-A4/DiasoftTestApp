@@ -1,6 +1,4 @@
-/**
- * Basic model that contains information about one friend
- */
+/// Basic model that contains information about one friend
 class Friend {
   // Default values of friend
   final int id;

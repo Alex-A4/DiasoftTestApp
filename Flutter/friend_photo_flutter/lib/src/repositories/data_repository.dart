@@ -31,7 +31,7 @@ class DataRepository {
   }
 
   /// Get list of friends
-  /// If they were in DB then return momentally
+  /// If they were in DB then return momentary
   /// else download them through API
   Future<List<Friend>> getFriendsList() async {
     if (_friends.friends.length != 0) return _friends.friends;
@@ -51,7 +51,7 @@ class DataRepository {
   }
 
   /// Get list of photos by specified [friendId]
-  /// If that photos alredy downloaded, then return them
+  /// If that photos already downloaded, then return them
   Future<List<Photo>> getPhotosList(int friendId) async {
     if (_photos.isIdentical(friendId)) return _photos.photos;
 
