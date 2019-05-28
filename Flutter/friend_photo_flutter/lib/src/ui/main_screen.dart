@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'auth_screen.dart';
 import 'friends_screen.dart';
 import 'launch_screen.dart';
+import 'photos_gallery.dart';
 
 class MainScreen extends StatelessWidget {
   @override
@@ -18,7 +19,13 @@ class MainScreen extends StatelessWidget {
         if (snapshot.hasData) {
           if (snapshot.data is StateLaunching) return LaunchScreen();
           if (snapshot.data is StateNotAuthenticated) return AuthScreen();
-          if (snapshot.data is StateAuthenticated) return FriendsScreen();
+          if (snapshot.data is StateFriends) return FriendsScreen();
+          if (snapshot.data is StateGallery)
+            return PhotosGallery(
+              name: snapshot.data.name,
+              lastName: snapshot.data.lastName,
+              friendId: snapshot.data.id,
+            );
         }
 
         return Container();
