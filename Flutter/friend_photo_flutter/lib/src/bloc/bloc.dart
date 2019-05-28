@@ -38,7 +38,7 @@ class Bloc {
       /// Delay process of work
       await Future.delayed(Duration(seconds: 2));
       if (await repository.checkAuthentication())
-        yield StateAuthenticated();
+        yield StateFriends();
       else
         yield StateNotAuthenticated();
     }
@@ -46,9 +46,13 @@ class Bloc {
     /// Try to authenticate user with input data
     if (event is EventAuthenticate) {
       if (repository.authenticateUser(event.url))
-        yield StateAuthenticated();
+        yield StateFriends();
       else
         yield StateNotAuthenticated();
+    }
+
+    if (event is EventGallery) {
+      yield StateGallery(event.name, event.lastName, event.id);
     }
   }
 
