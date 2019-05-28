@@ -44,7 +44,7 @@ class PhotosGallery extends StatelessWidget {
             if (data.length != 0)
               return getPhotoList(snapshot.data, context);
             else
-              return ErrorScreen(text: '$name have no photos');
+              return ErrorScreen(text: '$name has no photos');
           }
           return Center(child: CircularProgressIndicator());
         },
