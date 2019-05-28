@@ -24,7 +24,7 @@ class PhotosController {
   }
 
   /// Check is otherId and this id is equals
-  bool isIdential(int otherId) => _ownerId == otherId;
+  bool isIdentical(int otherId) => _ownerId == otherId;
 
   /// Default setter for id
   set ownerId(int id) => _ownerId = id;

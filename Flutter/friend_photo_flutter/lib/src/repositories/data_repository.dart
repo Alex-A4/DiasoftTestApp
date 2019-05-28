@@ -53,7 +53,7 @@ class DataRepository {
   /// Get list of photos by specified [friendId]
   /// If that photos alredy downloaded, then return them
   Future<List<Photo>> getPhotosList(int friendId) async {
-    if (_photos.isIdential(friendId)) return _photos.photos;
+    if (_photos.isIdentical(friendId)) return _photos.photos;
 
     var response =
         await http.get('https://api.vk.com/method/photos.get?owner_id='
