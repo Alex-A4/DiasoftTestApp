@@ -1,4 +1,4 @@
-package com.example.friend_photo_flutter;
+package alexa4.friend_photo_flutter;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
