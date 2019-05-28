@@ -17,6 +17,7 @@ class ErrorScreen extends StatelessWidget {
             size: 60.0,
             color: theme.primaryColor,
           ),
+          SizedBox(height: 15.0),
           Text(text),
         ],
       ),
