@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_advanced_networkimage/provider.dart';
 import 'package:flutter_advanced_networkimage/transition.dart';
 import 'package:friend_photo_flutter/src/bloc/bloc.dart';
+import 'package:friend_photo_flutter/src/bloc/bloc_events.dart';
 import 'package:friend_photo_flutter/src/models/friend.dart';
 import 'package:provider/provider.dart';
 
@@ -25,7 +26,7 @@ class FriendsScreen extends StatelessWidget {
           }
 
           if (snapshot.hasData) {
-            return getFriendsList(snapshot.data);
+            return getFriendsList(snapshot.data, bloc);
           }
 
           return Center(child: CircularProgressIndicator());
@@ -35,11 +36,12 @@ class FriendsScreen extends StatelessWidget {
   }
 
   /// Get the list of friends
-  Widget getFriendsList(List<Friend> friends) {
+  Widget getFriendsList(List<Friend> friends, Bloc bloc) {
     return ListView.builder(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       itemCount: friends.length,
       itemBuilder: (_, index) {
+        var friend = friends[index];
         return Container(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: InkWell(
@@ -47,7 +49,7 @@ class FriendsScreen extends StatelessWidget {
               children: <Widget>[
                 TransitionToImage(
                   image: AdvancedNetworkImage(
-                    friends[index].photoUrl,
+                    friend.photoUrl,
                     useDiskCache: true,
                     cacheRule: CacheRule(maxAge: const Duration(days: 7)),
                   ),
@@ -60,13 +62,14 @@ class FriendsScreen extends StatelessWidget {
                 SizedBox(width: 20.0),
                 Expanded(
                   child: Text(
-                    '${friends[index].name} ${friends[index].lastName}\n${friends[index].status}',
+                    '${friend.name} ${friend.lastName}\n${friend.status}',
                     maxLines: 3,
                   ),
                 ),
               ],
             ),
-            onTap: () {},
+            onTap: () => bloc.dispatch(
+                EventGallery(friend.name, friend.lastName, friend.id)),
           ),
         );
       },
