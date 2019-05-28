@@ -51,6 +51,8 @@ class Bloc {
         yield StateNotAuthenticated();
     }
 
+    if (event is EventFriends) yield StateFriends();
+
     if (event is EventGallery) {
       yield StateGallery(event.name, event.lastName, event.id);
     }
