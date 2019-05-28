@@ -8,7 +8,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="friend_photo_flutter"
+        android:label="Flutter-FriendPhoto"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
