@@ -23,4 +23,13 @@ class Friend {
       status: json['status'],
     );
   }
+
+  /// Convert friend object to Json. Needs to set to DB
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'first_name': name,
+        'last_name': lastName,
+        'photo_100': photoUrl,
+        'status': status
+      };
 }
