@@ -26,7 +26,11 @@ class FriendsScreen extends StatelessWidget {
           }
 
           if (snapshot.hasData) {
-            return getFriendsList(snapshot.data, bloc);
+            var data = snapshot.data;
+            if (data.length != 0)
+              return getFriendsList(data, bloc);
+            else
+              return ErrorScreen(text: 'You have no friends :(');
           }
 
           return Center(child: CircularProgressIndicator());
